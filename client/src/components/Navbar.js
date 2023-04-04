@@ -73,7 +73,7 @@ const navigate=useNavigate()
 }
 const Container=styled.div`
     .scrolled{
-        background-color:black;
+        background-color:rgba(0,0,0,0.8);        
     }
     nav{
         padding:0 4rem;

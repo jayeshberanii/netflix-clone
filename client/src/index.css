@@ -19,6 +19,7 @@ html,
 body{
   overflow-x: hidden;
   color: white;
+  background-color: black;
 }
 body::-webkit-scrollbar{
   display: none;
