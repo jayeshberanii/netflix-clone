@@ -60,7 +60,7 @@ const navigate=useNavigate()
                 />
             </div>
             <button onClick={()=>{
-                alert("hello")
+                alert("Logout SuccessFully")
                 signOut(firebaseAuth)
                 navigate('/login')
             }}>
@@ -93,7 +93,8 @@ const Container=styled.div`
                     height:4rem;
                 }
             }
-            .links{
+            .links{ 
+                margin-left:2rem;
                 list-style-type:none;
                 gap:2rem;
                 li{

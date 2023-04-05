@@ -2,6 +2,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import './App.css';
 import Login from './pages/Login';
 import Movies from './pages/Movies';
+import MyList from './pages/MyList';
 import Netflix from './pages/Netflix';
 import Player from './pages/Player';
 import SignUp from './pages/SignUp';
@@ -17,6 +18,7 @@ function App() {
         <Route exact path='/player' element={<Player/>} />
         <Route exact path='/movies' element={<Movies/>} />
         <Route exact path='/tv' element={<TVShows/>} />
+        <Route exact path='/my-list' element={<MyList/>} />
       </Routes>
     </BrowserRouter>
   );

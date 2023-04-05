@@ -7,10 +7,33 @@ import { BsCheck } from 'react-icons/bs'
 import { AiOutlinePlus } from 'react-icons/ai'
 import {BiChevronDown} from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
+import { onAuthStateChanged } from 'firebase/auth'
+import { firebaseAuth } from '../utils/firebase-config'
+import axios from 'axios'
+import { getMyPlayList } from '../store/slices/netflixSlice'
+import { useDispatch } from 'react-redux'
 
-export default React.memo(function Card({movieData,isLiked=false}) {
+export default React.memo(function Card({movieData,isLiked}) {
     const[isHovered,setIsHovered]=useState(false)
+    const[email,setEmail]=useState('')
+    const dispatch=useDispatch()
     const navigate=useNavigate()
+
+    onAuthStateChanged(firebaseAuth, (currentUser) => {
+        setEmail(currentUser?.email)
+    });
+
+    const addMovieToMyList=async()=>{
+        await axios.post('http://localhost:4000/api/user/add',{email,data:movieData})
+        .catch(err=>console.log(err.message))
+    }
+    const removeMovieFromMyList=async()=>{
+        await axios.post('http://localhost:4000/api/user/remove',{email,data:movieData})
+        .then(res=>{
+            dispatch(getMyPlayList(email))
+        })
+        .catch(err=>console.log(err.message))
+    }
   return (
     <Container 
         onMouseEnter={()=>setIsHovered(true)} 
@@ -36,9 +59,9 @@ export default React.memo(function Card({movieData,isLiked=false}) {
                                 <RiThumbDownFill title="Dislike" />
                                 {
                                     isLiked ? (
-                                        <BsCheck title='Remove From List' /> 
+                                        <BsCheck title='Remove From List' onClick={removeMovieFromMyList}/> 
                                         ):(
-                                        <AiOutlinePlus title='Add To My List'/>
+                                        <AiOutlinePlus title='Add To My List' onClick={addMovieToMyList}/>
                                         )
                                 }
                             </div>

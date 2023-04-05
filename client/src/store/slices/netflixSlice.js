@@ -1,3 +1,4 @@
+import { async } from "@firebase/util";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_KEY, TMBD_BASE_URL } from "../../utils/contants";
@@ -8,6 +9,7 @@ const NetflixSlice = createSlice({
         movies: [],
         genresLoaded: false,
         genres: [],
+        myPlayList:[]
     },
     extraReducers: (builder) => {
         builder.addCase(getGenres.fulfilled, (state, action) => {
@@ -20,9 +22,13 @@ const NetflixSlice = createSlice({
         builder.addCase(fetchMoviesByGenre.fulfilled, (state, action) => {
             state.movies = action.payload;
         });
+        builder.addCase(getMyPlayList.fulfilled, (state, action) => {
+            state.myPlayList = action.payload;
+        });
     },
 });
 
+//TODO : Get Genres
 export const getGenres = createAsyncThunk("netflix/genres", async () => {
     const { data: { genres } } = await axios.get(
         `${TMBD_BASE_URL}/genre/movie/list?api_key=${API_KEY}`
@@ -30,6 +36,7 @@ export const getGenres = createAsyncThunk("netflix/genres", async () => {
     return genres
 });
 
+//TODO : Create Array From RowData
 export const createArrayFromRawData = (array, moviesArray, genres) => {
     array.forEach(movie => {
         const movieGenres = []
@@ -46,6 +53,7 @@ export const createArrayFromRawData = (array, moviesArray, genres) => {
     });
 }
 
+//TODO : Get RowData from API
 export const getRawData = async (api, genres, paging) => {
     const movieArray = []
     for (let i = 1; movieArray.length < 60 && i < 10; i++) {
@@ -60,17 +68,24 @@ export const getRawData = async (api, genres, paging) => {
     }
     return movieArray;
 }
-
+//TODO : Fetch All Movies
 export const fetchMovies = createAsyncThunk('netflix/trending', async ({ type }, thunkApi) => {
     const { netflix: { genres } } = thunkApi.getState()
     return getRawData(`${TMBD_BASE_URL}/trending/${type}/week?api_key=${API_KEY}`, genres, true)
     // return getRawData(`${TMBD_BASE_URL}/discover/${type}?api_key=${API_KEY}&with_genres=${genres}`)
 })
 
+//TODO : Fetch Movies By Genre
 export const fetchMoviesByGenre = createAsyncThunk('netflix/moviesByGenre', async ({ genre, type }, thunkApi) => {
     const { netflix: { genres } } = thunkApi.getState()
     // return getRawData(`${TMBD_BASE_URL}/trending/${type}/week?api_key=${API_KEY}`, genres, true)
     return getRawData(`${TMBD_BASE_URL}/discover/${type}?api_key=${API_KEY}&with_genres=${genre}`, genres)
+})
+
+//TODO : Get MyPlay List
+export const getMyPlayList=createAsyncThunk('netflix/MyPlayList',async(email)=>{
+    const response=await axios.post('http://localhost:4000/api/user/get-play-list',{email})
+    return response.data
 })
 
 export default NetflixSlice.reducer;

@@ -9,13 +9,13 @@ export default React.memo(function CardSlider({ data, title }) {
     const listRef = useRef()
 
     const handleDirection = (direction) => {
-        let distanse = listRef.current.getBoundingClientRect().x - 70;
+        let distance = listRef.current.getBoundingClientRect().x - 70;
         if (direction === "left" && sliderPosition > 0) {
-            listRef.current.style.transform = `translateX(${230 + distanse}px)`
+            listRef.current.style.transform = `translateX(${270 + distance}px)`
             setSliderPosition(sliderPosition - 1)
         }
-        if (direction === "right" && sliderPosition < 4) {
-            listRef.current.style.transform = `translateX(${-230 + distanse}px)`
+        if (direction === "right" && sliderPosition < 5) {
+            listRef.current.style.transform = `translateX(${-230 + distance}px)`
             setSliderPosition(sliderPosition + 1)
         }
     }
@@ -27,19 +27,19 @@ export default React.memo(function CardSlider({ data, title }) {
         >
             <h1>{title}</h1>
             <div className="wrapper">
-                <div className={`slider-action left ${!showControls ? "none" : ""} d-flex justify-content-center align-items-center`}>
+                <div className={`slider-action left ${!(showControls && title!=="My PlayList") ? "none" : ""} d-flex justify-content-center align-items-center`}>
                     <AiOutlineLeft onClick={() => handleDirection("left")} />
                 </div>
-                <div className="d-flex slider" ref={listRef}>
+                <div className={`d-flex slider ${title==="My PlayList" ? "flex-wrap" : "max-content"}`} ref={listRef}>
                     {
                         data?.map((movie, pos) => {
                             return (
-                                <Card movieData={movie} index={pos} key={movie.id} />
+                                <Card movieData={movie} isLiked={title==="My PlayList" ? true : false} index={pos} key={movie.id} />
                             )
                         })
                     }
                 </div>
-                <div className={`slider-action right ${!showControls ? "none" : ""} d-flex justify-content-center align-items-center`}>
+                <div className={`slider-action right ${!(showControls && title!=="My PlayList") ? "none" : ""} d-flex justify-content-center align-items-center`}>
                     <AiOutlineRight onClick={() => handleDirection("right")} />
                 </div>
             </div>
@@ -54,8 +54,7 @@ const Container = styled.div`
         margin-left:50px;
     }
     .wrapper{
-        .slider{
-            width:max-content;
+        .slider{            
             gap:1rem;
             transform:translateX(0px);
             transition:0.3s ease-in-out;
@@ -78,9 +77,11 @@ const Container = styled.div`
         }
         .left{
             left:0;
+            top:1rem;
         }
         .right{
             right:0;
+            top:1rem;
         }
     }
 `;

@@ -6,7 +6,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -42,4 +41,9 @@ body::-webkit-scrollbar{
 .flex-column{
   flex-direction: column;
 }
-
+.flex-wrap{
+  flex-wrap: wrap;
+}
+.max-content{
+  width: max-content;
+}
