@@ -1,11 +1,9 @@
 const User = require('../models/UserModel')
 
-
 //TODO: Add Movie To My List
 module.exports.addMoviesToMyList = async (req, res) => {
     try {
         const { email, data } = req.body
-        console.log(data);
         const user = await User.findOne({ email: email })
         if (!user) {
             await User.create({ email, likedMovies: [data] })
