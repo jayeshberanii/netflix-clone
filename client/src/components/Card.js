@@ -24,11 +24,11 @@ export default React.memo(function Card({movieData,isLiked}) {
     });
 
     const addMovieToMyList=async()=>{
-        await axios.post('http://localhost:4000/api/user/add',{email,data:movieData})
+        await axios.post('https://react-node-netflix-server.onrender.com/api/user/add',{email,data:movieData})
         .catch(err=>console.log(err.message))
     }
     const removeMovieFromMyList=async()=>{
-        await axios.post('http://localhost:4000/api/user/remove',{email,data:movieData})
+        await axios.post('https://react-node-netflix-server.onrender.com/api/user/remove',{email,data:movieData})
         .then(res=>{
             dispatch(getMyPlayList(email))
         })
